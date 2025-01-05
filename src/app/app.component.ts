@@ -39,7 +39,7 @@ export class AppComponent implements OnInit {
   checkAllInput() {
     let cells = document.querySelectorAll('.cell');
     for (let i = 0; i < cells.length; i++) {
-      if (cells[i].textContent != '') {
+      if ((cells[i] as HTMLElement).style.backgroundImage != '') {
         this.resetBtn = false;
         return;
       }
@@ -49,11 +49,15 @@ export class AppComponent implements OnInit {
     if (!this.stopInput) {
       // console.log(i);
       let cells = document.querySelectorAll('.cell');
-      if (cells[i].textContent != '') {
+      if ((cells[i] as HTMLElement).style.backgroundImage != '') {
         return;
       }
-      if (this.nextPlayer) cells[i].textContent = 'O';
-      else cells[i].textContent = 'X';
+      navigator.vibrate(100);
+      if (this.nextPlayer) {
+        (cells[i] as HTMLElement).style.backgroundImage = "url('o.svg')";
+        (cells[i] as HTMLElement).style.scale = '0.8';
+      } else (cells[i] as HTMLElement).style.backgroundImage = "url('x.svg')";
+
       this.nextPlayer = !this.nextPlayer;
       this.checkWinner();
     }
@@ -62,13 +66,22 @@ export class AppComponent implements OnInit {
     for (let i = 0; i < this.wins.length; i++) {
       // possibility
       const poss = this.wins[i];
+      // console.log(poss);
+
       let winner = [];
       for (let j = 0; j < poss.length; j++) {
         let cells = document.querySelectorAll('.cell');
-        // console.log(cells[poss[j]].textContent);
-        winner.push(cells[poss[j]].textContent);
+
+        winner.push((cells[poss[j]] as HTMLElement).style.backgroundImage);
       }
-      if (winner[0] == 'O' && winner[1] == 'O' && winner[2] == 'O') {
+      // console.log(winner);
+      // console.log(winner);
+
+      if (
+        winner[0].includes('o.svg') &&
+        winner[1].includes('o.svg') &&
+        winner[2].includes('o.svg')
+      ) {
         this.winner = 'O';
         console.log('O is the winner');
         this.stopInput = true;
@@ -77,7 +90,11 @@ export class AppComponent implements OnInit {
         this.resetBtn = false;
         return;
       }
-      if (winner[0] == 'X' && winner[1] == 'X' && winner[2] == 'X') {
+      if (
+        winner[0].includes('x.svg') &&
+        winner[1].includes('x.svg') &&
+        winner[2].includes('x.svg')
+      ) {
         console.log('X is the winner');
         this.winner = 'X';
         this.stopInput = true;
@@ -169,7 +186,8 @@ export class AppComponent implements OnInit {
   resetGame() {
     let cells = document.querySelectorAll('.cell');
     for (let i = 0; i < cells.length; i++) {
-      cells[i].textContent = '';
+      (cells[i] as HTMLElement).style.backgroundImage = '';
+      (cells[i] as HTMLElement).style.scale = '1';
     }
     this.nextPlayer = false;
     this.stopInput = false;

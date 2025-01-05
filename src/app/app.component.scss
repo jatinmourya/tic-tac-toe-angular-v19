@@ -111,6 +111,9 @@ main {
     user-select: none;
     cursor: pointer;
     color: #303030;
+    background-repeat: no-repeat;
+    // background-size: 100%;
+    background-size: contain;
   }
 }
 #confettiCanvas {
